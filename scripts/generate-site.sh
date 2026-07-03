@@ -10,7 +10,7 @@ fail() { echo "ERROR: generate-site: $1" >&2; exit 1; }
 [[ -s "$ROOT/site.config.json" ]] || fail "missing site.config.json"
 
 python3 << 'PYEOF'
-import json, os, sys, shutil
+import json, os, sys, shutil, re
 from pathlib import Path
 
 root = Path(os.environ["SITE_ROOT"])
@@ -96,7 +96,6 @@ head_block = f"""<!-- SITE_HEAD_START -->
 <meta property="og:url" content="{origin}/">
 <meta property="og:type" content="website">
 <!-- SITE_HEAD_END -->"""
-import re
 patched, n = re.subn(
     r"<!-- SITE_HEAD_START -->.*?<!-- SITE_HEAD_END -->",
     head_block,
