@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://verifunding.com/sitemap.xml

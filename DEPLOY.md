@@ -2,7 +2,7 @@
 
 ## Configuration
 
-All site identity and CTA settings live in [`site.config.json`](site.config.json). Brand assets live in [`brand/`](brand/). Build generates `public/site.js`, `public/assets/*`, `sitemap.xml`, `robots.txt`, and the SEO head block in `index.html`.
+All site identity and CTA settings live in [`site.config.json`](site.config.json). Brand assets live in [`brand/`](brand/). Build generates `public/site.js`, `public/assets/*`, `sitemap.xml`, `robots.txt`, and the SEO head block in `index.html`. Generated files under `public/` are not committed — run `bash scripts/verify-deploy.sh` before serving locally or deploying.
 
 Repository: https://github.com/jonkimdev/verifunding-website
 

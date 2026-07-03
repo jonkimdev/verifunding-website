@@ -1,9 +1,0 @@
-// Generated from site.config.json — do not edit. Run scripts/generate-site.sh
-window.SITE = Object.freeze({
-  "ctaHref": "mailto:requests@verifunding.com",
-  "ctaTarget": "_self",
-  "contactEmail": "requests@verifunding.com",
-  "canonicalOrigin": "https://verifunding.com",
-  "companyLegal": "ClearMetric LLC",
-  "productName": "VeriFunding"
-});
