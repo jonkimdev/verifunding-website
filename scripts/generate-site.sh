@@ -10,12 +10,26 @@ fail() { echo "ERROR: generate-site: $1" >&2; exit 1; }
 [[ -s "$ROOT/site.config.json" ]] || fail "missing site.config.json"
 
 python3 << 'PYEOF'
-import json, os, sys
+import json, os, sys, shutil
 from pathlib import Path
 
 root = Path(os.environ["SITE_ROOT"])
 config_path = root / "site.config.json"
 public = root / "public"
+brand = root / "brand"
+assets = public / "assets"
+assets.mkdir(parents=True, exist_ok=True)
+
+brand_files = {
+    "verifunding_logo.png": assets / "verifunding_logo.png",
+    "verifunding_logo_white.png": assets / "verifunding_logo_white.png",
+    "favicon.ico": assets / "favicon.ico",
+}
+for src_name, dest in brand_files.items():
+    src = brand / src_name
+    if not src.is_file() or src.stat().st_size == 0:
+        sys.exit(f"ERROR: generate-site: missing brand asset: brand/{src_name}")
+    shutil.copy2(src, dest)
 
 with open(config_path) as f:
     cfg = json.load(f)

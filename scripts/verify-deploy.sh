@@ -6,12 +6,14 @@ fail() { echo "ERROR: $1" >&2; exit 1; }
 
 bash "$ROOT/scripts/generate-site.sh"
 
-# 1. Required files exist and non-empty
+# 1. Required source and generated files exist and non-empty
+for f in brand/verifunding_logo.png brand/verifunding_logo_white.png brand/favicon.ico site.config.json; do
+  [[ -s "$ROOT/$f" ]] || fail "missing or empty: $f"
+done
 for f in index.html site.js site-bind.js support.js privacy.html robots.txt sitemap.xml _headers \
          assets/verifunding_logo.png assets/verifunding_logo_white.png assets/favicon.ico; do
   [[ -s "$PUBLIC/$f" ]] || fail "missing or empty: public/$f"
 done
-[[ -s "$ROOT/site.config.json" ]] || fail "missing or empty: site.config.json"
 
 # 2. No placeholder links
 rg -q 'href="#"' "$PUBLIC" && fail 'found href="#" in public/'
