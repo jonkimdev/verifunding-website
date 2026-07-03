@@ -7,11 +7,11 @@ fail() { echo "ERROR: $1" >&2; exit 1; }
 bash "$ROOT/scripts/generate-site.sh"
 
 # 1. Required source and generated files exist and non-empty
-for f in brand/verifunding_logo.png brand/verifunding_logo_white.png brand/favicon.ico site.config.json; do
+for f in brand/verifunding_logo.png brand/verifunding_logo_white.png brand/verifunding_favicon.png site.config.json; do
   [[ -s "$ROOT/$f" ]] || fail "missing or empty: $f"
 done
 for f in index.html site.js site-bind.js support.js privacy.html robots.txt sitemap.xml _headers \
-         assets/verifunding_logo.png assets/verifunding_logo_white.png assets/favicon.ico; do
+         assets/verifunding_logo.png assets/verifunding_logo_white.png assets/favicon.png; do
   [[ -s "$PUBLIC/$f" ]] || fail "missing or empty: public/$f"
 done
 
@@ -47,7 +47,8 @@ rg -q 'hint-placeholder' "$PUBLIC/index.html" && fail 'design-tool hint-placehol
 ORIGIN=$(python3 -c "import json; print(json.load(open('$ROOT/site.config.json'))['canonicalOrigin'].rstrip('/'))")
 rg -q "$ORIGIN" "$PUBLIC/sitemap.xml" || fail "sitemap.xml missing canonicalOrigin: $ORIGIN"
 rg -q "$ORIGIN" "$PUBLIC/robots.txt" || fail "robots.txt missing canonicalOrigin: $ORIGIN"
-rg -q "$ORIGIN/" "$PUBLIC/index.html" || fail "index.html missing canonicalOrigin: $ORIGIN"
+rg -q 'rel="icon" href="/assets/favicon.png"' "$PUBLIC/index.html" || fail 'index.html missing favicon link'
+rg -q 'rel="icon" href="/assets/favicon.png"' "$PUBLIC/privacy.html" || fail 'privacy.html missing favicon link'
 
 # 10. No duplicate contact strings outside allowed files
 ALLOWED='site.js|site.config.json|privacy.html|DEPLOY.md|INTAKE.md'

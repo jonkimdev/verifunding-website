@@ -23,7 +23,7 @@ assets.mkdir(parents=True, exist_ok=True)
 brand_files = {
     "verifunding_logo.png": assets / "verifunding_logo.png",
     "verifunding_logo_white.png": assets / "verifunding_logo_white.png",
-    "favicon.ico": assets / "favicon.ico",
+    "verifunding_favicon.png": assets / "favicon.png",
 }
 for src_name, dest in brand_files.items():
     src = brand / src_name
@@ -86,6 +86,8 @@ head_block = f"""<!-- SITE_HEAD_START -->
 <title>{page_title}</title>
 <meta name="description" content="{meta_desc}">
 <link rel="canonical" href="{origin}/">
+<link rel="icon" href="/assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/favicon.png">
 <meta property="og:title" content="{page_title}">
 <meta property="og:description" content="{og_desc}">
 <meta property="og:url" content="{origin}/">
