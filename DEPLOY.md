@@ -2,7 +2,15 @@
 
 ## Configuration
 
-All site identity and CTA settings live in [`site.config.json`](site.config.json). Brand assets live in [`brand/`](brand/). Build generates `public/site.js`, `public/assets/*`, `sitemap.xml`, `robots.txt`, and the SEO head block in `index.html`. Generated files under `public/` are not committed — run `bash scripts/verify-deploy.sh` before serving locally or deploying.
+All site identity and CTA settings live in [`site.config.json`](site.config.json). Brand assets in [`brand/`](brand/):
+
+| Source | Deployed as |
+|--------|-------------|
+| `verifunding_logo.png` | `public/assets/verifunding_logo.png` |
+| `verifunding_logo_white.png` | `public/assets/verifunding_logo_white.png` |
+| `verifunding_favicon.png` | `public/assets/favicon.png` (icon + apple-touch-icon) |
+
+Build generates `public/site.js`, `public/assets/*`, `sitemap.xml`, `robots.txt`, and the SEO head block in `index.html`. Generated files under `public/` are not committed — run `bash scripts/verify-deploy.sh` before serving locally or deploying.
 
 Repository: https://github.com/jonkimdev/verifunding-website
 
