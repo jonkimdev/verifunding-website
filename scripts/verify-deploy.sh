@@ -40,17 +40,22 @@ EMAIL=$(python3 -c "import json; print(json.load(open('$ROOT/site.config.json'))
 rg -q "\"contactEmail\": \"$EMAIL\"" "$PUBLIC/site.js" || fail "site.js contactEmail mismatch with site.config.json"
 rg -q "data-site-field=\"contactEmail\"" "$PUBLIC/privacy.html" || fail 'privacy.html missing contactEmail binding'
 
-# 8. No design-tool placeholders left
+# 8. dc-runtime bindings and CTA count
+rg -q 'data-dc-script' "$PUBLIC/index.html" || fail 'index.html missing data-dc-script (CTA bindings will break)'
+CTA_COUNT=$(rg -o 'href="\{\{ ctaHref \}\}"' "$PUBLIC/index.html" | wc -l | tr -d ' ')
+[[ "$CTA_COUNT" == "7" ]] || fail "expected 7 CTA bindings in index.html, found $CTA_COUNT"
+
+# 9. No design-tool placeholders left
 rg -q 'hint-placeholder' "$PUBLIC/index.html" && fail 'design-tool hint-placeholder attributes remain'
 
-# 9. canonicalOrigin consistent across config and generated files
+# 10. canonicalOrigin consistent across config and generated files
 ORIGIN=$(python3 -c "import json; print(json.load(open('$ROOT/site.config.json'))['canonicalOrigin'].rstrip('/'))")
 rg -q "$ORIGIN" "$PUBLIC/sitemap.xml" || fail "sitemap.xml missing canonicalOrigin: $ORIGIN"
 rg -q "$ORIGIN" "$PUBLIC/robots.txt" || fail "robots.txt missing canonicalOrigin: $ORIGIN"
 rg -q 'rel="icon" href="/assets/favicon.png"' "$PUBLIC/index.html" || fail 'index.html missing favicon link'
 rg -q 'SITE_FAVICON_START' "$PUBLIC/privacy.html" || fail 'privacy.html missing SITE_FAVICON block'
 
-# 10. No duplicate contact strings outside allowed files
+# 11. No duplicate contact strings outside allowed files
 ALLOWED='site.js|site.config.json|privacy.html|DEPLOY.md|INTAKE.md'
 MATCHES=$(rg -l "$EMAIL" "$ROOT" --glob '!*.git/*' 2>/dev/null || true)
 if [[ -n "$MATCHES" ]]; then

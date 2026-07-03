@@ -28,7 +28,18 @@ Optional Cloudflare Pages environment overrides (applied at build time):
 ## Prerequisites
 
 - GitHub repo pushed from this directory
-- Cloudflare account with `verifunding.com` on Cloudflare DNS
+- Cloudflare account
+- `verifunding.com` registered at your registrar (currently Namecheap with URL forwarding — see **DNS migration** below)
+
+## DNS migration (Namecheap → Cloudflare)
+
+If the domain still uses registrar nameservers (`dns1.registrar-servers.com`) or Namecheap URL Forward, Pages custom domains will not work until DNS is on Cloudflare:
+
+1. Cloudflare Dashboard → **Add a site** → enter `verifunding.com` → follow the scan/import steps
+2. At Namecheap: **Domain List** → **Manage** → **Nameservers** → **Custom DNS** → set Cloudflare’s two assigned nameservers
+3. Wait for Cloudflare to show the zone as **Active** (often minutes, up to 24h)
+4. Remove any **URL Redirect Record** or parking/forwarding rules at Namecheap (they conflict with Cloudflare)
+5. Proceed with Pages setup below; Cloudflare will create the required DNS records when you attach the custom domain
 
 ## Cloudflare Pages setup
 
