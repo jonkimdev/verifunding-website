@@ -2,7 +2,9 @@
 
 ## Configuration
 
-All site identity and CTA settings live in [`site.config.json`](site.config.json). Build generates `public/site.js`, `sitemap.xml`, `robots.txt`, and the SEO head block in `index.html`.
+All site identity and CTA settings live in [`site.config.json`](site.config.json). Brand assets live in [`brand/`](brand/). Build generates `public/site.js`, `public/assets/*`, `sitemap.xml`, `robots.txt`, and the SEO head block in `index.html`.
+
+Repository: https://github.com/jonkimdev/verifunding-website
 
 Optional Cloudflare Pages environment overrides (applied at build time):
 
