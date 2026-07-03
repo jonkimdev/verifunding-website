@@ -82,12 +82,15 @@ product = cfg["productName"]
 page_title = f"{product} — Business funding, matched to your deal"
 meta_desc = "Commercial financing referral for equipment finance, factoring, and ABL. One request, human review, routed with your consent."
 og_desc = "Commercial financing referral for equipment finance, factoring, and ABL."
+favicon_links = (
+    '<link rel="icon" href="/assets/favicon.png" type="image/png">\n'
+    '<link rel="apple-touch-icon" href="/assets/favicon.png">'
+)
 head_block = f"""<!-- SITE_HEAD_START -->
 <title>{page_title}</title>
 <meta name="description" content="{meta_desc}">
 <link rel="canonical" href="{origin}/">
-<link rel="icon" href="/assets/favicon.png" type="image/png">
-<link rel="apple-touch-icon" href="/assets/favicon.png">
+{favicon_links}
 <meta property="og:title" content="{page_title}">
 <meta property="og:description" content="{og_desc}">
 <meta property="og:url" content="{origin}/">
@@ -104,6 +107,20 @@ patched, n = re.subn(
 if n != 1:
     sys.exit("ERROR: generate-site: could not patch SITE_HEAD block in index.html")
 index_path.write_text(patched)
+
+privacy_path = public / "privacy.html"
+privacy_html = privacy_path.read_text()
+favicon_block = f"<!-- SITE_FAVICON_START -->\n{favicon_links}\n<!-- SITE_FAVICON_END -->"
+patched, n = re.subn(
+    r"<!-- SITE_FAVICON_START -->.*?<!-- SITE_FAVICON_END -->",
+    favicon_block,
+    privacy_html,
+    count=1,
+    flags=re.DOTALL,
+)
+if n != 1:
+    sys.exit("ERROR: generate-site: could not patch SITE_FAVICON block in privacy.html")
+privacy_path.write_text(patched)
 
 print("generate-site: OK")
 PYEOF

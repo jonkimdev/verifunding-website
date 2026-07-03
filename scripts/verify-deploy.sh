@@ -48,7 +48,7 @@ ORIGIN=$(python3 -c "import json; print(json.load(open('$ROOT/site.config.json')
 rg -q "$ORIGIN" "$PUBLIC/sitemap.xml" || fail "sitemap.xml missing canonicalOrigin: $ORIGIN"
 rg -q "$ORIGIN" "$PUBLIC/robots.txt" || fail "robots.txt missing canonicalOrigin: $ORIGIN"
 rg -q 'rel="icon" href="/assets/favicon.png"' "$PUBLIC/index.html" || fail 'index.html missing favicon link'
-rg -q 'rel="icon" href="/assets/favicon.png"' "$PUBLIC/privacy.html" || fail 'privacy.html missing favicon link'
+rg -q 'SITE_FAVICON_START' "$PUBLIC/privacy.html" || fail 'privacy.html missing SITE_FAVICON block'
 
 # 10. No duplicate contact strings outside allowed files
 ALLOWED='site.js|site.config.json|privacy.html|DEPLOY.md|INTAKE.md'

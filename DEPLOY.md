@@ -33,7 +33,7 @@ Optional Cloudflare Pages environment overrides (applied at build time):
 ## Cloudflare Pages setup
 
 1. Cloudflare Dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
-2. Select the repository containing this `website/` folder
+2. Select **jonkimdev/verifunding-website** (repo root is the project — no subdirectory)
 3. Build settings:
 
 | Setting | Value |
@@ -45,6 +45,7 @@ Optional Cloudflare Pages environment overrides (applied at build time):
 4. Deploy and confirm preview URL (`*.pages.dev`) loads:
    - `/` renders with Borrower / Lender / Partner tabs
    - CTAs link to configured `ctaHref`
+   - `/assets/favicon.png` returns the brand icon
    - `/privacy.html` loads with contact email from `site.js`
    - `/site.js` returns the frozen `SITE` config
 
