@@ -1,5 +1,20 @@
 # Deploy VeriFunding to Cloudflare Pages
 
+## Configuration
+
+All site identity and CTA settings live in [`site.config.json`](site.config.json). Build generates `public/site.js`, `sitemap.xml`, `robots.txt`, and the SEO head block in `index.html`.
+
+Optional Cloudflare Pages environment overrides (applied at build time):
+
+| Variable | Overrides |
+|----------|-----------|
+| `SITE_CTA_HREF` | `ctaHref` |
+| `SITE_CTA_TARGET` | `ctaTarget` |
+| `SITE_CONTACT_EMAIL` | `contactEmail` |
+| `SITE_CANONICAL_ORIGIN` | `canonicalOrigin` |
+| `SITE_COMPANY_LEGAL` | `companyLegal` |
+| `SITE_PRODUCT_NAME` | `productName` |
+
 ## Prerequisites
 
 - GitHub repo pushed from this directory
@@ -16,12 +31,11 @@
 | Production branch | `main` |
 | Build command | `bash scripts/verify-deploy.sh` |
 | Build output directory | `public` |
-| Environment variables | none |
 
 4. Deploy and confirm preview URL (`*.pages.dev`) loads:
    - `/` renders with Borrower / Lender / Partner tabs
-   - CTAs link to `mailto:requests@verifunding.com`
-   - `/privacy.html` loads
+   - CTAs link to configured `ctaHref`
+   - `/privacy.html` loads with contact email from `site.js`
    - `/site.js` returns the frozen `SITE` config
 
 If the build fails, read the `ERROR:` line in the build log — fix the root cause; do not bypass `verify-deploy.sh`.

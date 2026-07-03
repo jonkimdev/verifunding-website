@@ -3,14 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- SITE_HEAD_START -->
 <title>VeriFunding — Business funding, matched to your deal</title>
 <meta name="description" content="Commercial financing referral for equipment finance, factoring, and ABL. One request, human review, routed with your consent.">
 <link rel="canonical" href="https://verifunding.com/">
-<link rel="icon" href="/assets/favicon.ico">
 <meta property="og:title" content="VeriFunding — Business funding, matched to your deal">
 <meta property="og:description" content="Commercial financing referral for equipment finance, factoring, and ABL.">
 <meta property="og:url" content="https://verifunding.com/">
 <meta property="og:type" content="website">
+<!-- SITE_HEAD_END -->
+<link rel="icon" href="/assets/favicon.ico">
 <script src="./site.js"></script>
 <script src="./support.js"></script>
 </head>
@@ -41,7 +43,7 @@
   <header style="position: sticky; top: 0; z-index: 40; background: rgba(246,245,242,0.82); backdrop-filter: saturate(150%) blur(14px); border-bottom: 1px solid #E4E3DE;">
     <div style="max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 24px;">
       <a href="#top" style="display: flex; align-items: center; text-decoration: none;">
-        <img src="assets/verifunding_logo.png" alt="VeriFunding" style="height: 30px; width: auto; display: block;" />
+        <img src="assets/verifunding_logo.png" alt="{{ productName }}" style="height: 30px; width: auto; display: block;" />
       </a>
 
       <nav style="display: flex; align-items: center; gap: 4px; background: #FFFFFF; border: 1px solid #E4E3DE; border-radius: 11px; padding: 4px; box-shadow: 0 1px 2px rgba(15,17,22,0.03);">
@@ -365,9 +367,9 @@
   <footer style="position: relative; z-index: 1; border-top: 1px solid #E4E3DE; background: #0E1116;">
     <div style="max-width: 1200px; margin: 0 auto; padding: 52px 32px 44px;">
       <div style="margin-bottom: 26px;">
-        <img src="assets/verifunding_logo_white.png" alt="VeriFunding" style="height: 26px; width: auto; display: block;" />
+        <img src="assets/verifunding_logo_white.png" alt="{{ productName }}" style="height: 26px; width: auto; display: block;" />
       </div>
-      <p style="font-size: 12.5px; line-height: 1.7; color: #8A909B; margin: 0; max-width: 76em;">VeriFunding is a commercial financing referral service operated by ClearMetric LLC. VeriFunding is not a lender, makes no credit decisions, and does not guarantee financing. Financing is provided by, and subject to approval by, independent funding partners. No upfront borrower fee; VeriFunding may be compensated by partners on closed financing. VeriFunding does not offer merchant cash advance or sales-based financing.</p>
+      <p style="font-size: 12.5px; line-height: 1.7; color: #8A909B; margin: 0; max-width: 76em;">{{ footerDisclaimer }}</p>
       <div style="margin-top: 30px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12px; color: #6A707A;">
         <span>&copy; {{ year }} {{ companyLegal }}. All rights reserved. · <a href="/privacy.html" style="color: #8A909B; text-decoration: underline;">Privacy Policy</a></span>
         <span style="font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.04em;">Operated under {{ companyLegal }}</span>
@@ -389,6 +391,7 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state;
     const site = window.SITE;
+    if (!site) throw new Error('window.SITE is not defined — site.js must load before dc-runtime');
     return {
       isBorrower: s.view === 'borrower',
       isLender: s.view === 'lender',
@@ -406,6 +409,7 @@ class Component extends DCLogic {
       contactEmail: site.contactEmail,
       companyLegal: site.companyLegal,
       productName: site.productName,
+      footerDisclaimer: site.productName + ' is a commercial financing referral service operated by ' + site.companyLegal + '. ' + site.productName + ' is not a lender, makes no credit decisions, and does not guarantee financing. Financing is provided by, and subject to approval by, independent funding partners. No upfront borrower fee; ' + site.productName + ' may be compensated by partners on closed financing. ' + site.productName + ' does not offer merchant cash advance or sales-based financing.',
 
       ctaHover: { background: '#232B36', transform: 'translateY(-1px)' },
       linkHover: { color: '#2F7D5B' },

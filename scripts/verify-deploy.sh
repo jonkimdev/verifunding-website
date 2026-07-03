@@ -4,11 +4,14 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PUBLIC="$ROOT/public"
 fail() { echo "ERROR: $1" >&2; exit 1; }
 
+bash "$ROOT/scripts/generate-site.sh"
+
 # 1. Required files exist and non-empty
-for f in index.html site.js support.js privacy.html robots.txt sitemap.xml _headers \
+for f in index.html site.js site-bind.js support.js privacy.html robots.txt sitemap.xml _headers \
          assets/verifunding_logo.png assets/verifunding_logo_white.png assets/favicon.ico; do
-  [[ -s "$PUBLIC/$f" ]] || fail "missing or empty: $f"
+  [[ -s "$PUBLIC/$f" ]] || fail "missing or empty: public/$f"
 done
+[[ -s "$ROOT/site.config.json" ]] || fail "missing or empty: site.config.json"
 
 # 2. No placeholder links
 rg -q 'href="#"' "$PUBLIC" && fail 'found href="#" in public/'
@@ -16,11 +19,12 @@ rg -q 'href="#"' "$PUBLIC" && fail 'found href="#" in public/'
 # 3. No removed modal API
 rg -q 'openModal|submitForm|modalOpen|INTAKE MODAL' "$PUBLIC/index.html" && fail 'stale modal references in index.html'
 
-# 4. site.js config valid
-rg -q "ctaHref: 'mailto:" "$PUBLIC/site.js" || fail 'site.js ctaHref not set'
-rg -q "contactEmail: '" "$PUBLIC/site.js" || fail 'site.js contactEmail not set'
+# 4. site.js generated from config
+rg -q 'Generated from site.config.json' "$PUBLIC/site.js" || fail 'site.js was not generated'
+rg -q '"contactEmail"' "$PUBLIC/site.js" || fail 'site.js contactEmail not set'
 
-# 5. Metadata present
+# 5. Metadata present in generated head block
+rg -q 'SITE_HEAD_START' "$PUBLIC/index.html" || fail 'missing SITE_HEAD block in index.html'
 rg -q '<title>' "$PUBLIC/index.html" || fail 'missing <title>'
 rg -q 'name="description"' "$PUBLIC/index.html" || fail 'missing meta description'
 
@@ -29,15 +33,29 @@ for legacy in "VeriFunding Website" "VeriFunding.html" "VeriFunding.dc.html" "Ve
   [[ ! -e "$ROOT/$legacy" ]] || fail "legacy file still present: $legacy"
 done
 
-# 7. contactEmail consistent across site.js and privacy.html
-EMAIL=$(rg -o "contactEmail: '([^']+)" "$PUBLIC/site.js" -r '$1')
-rg -q "$EMAIL" "$PUBLIC/privacy.html" || fail "privacy.html missing contactEmail: $EMAIL"
+# 7. contactEmail consistent: config → site.js → privacy.html data attribute
+EMAIL=$(python3 -c "import json; print(json.load(open('$ROOT/site.config.json'))['contactEmail'])")
+rg -q "\"contactEmail\": \"$EMAIL\"" "$PUBLIC/site.js" || fail "site.js contactEmail mismatch with site.config.json"
+rg -q "data-site-field=\"contactEmail\"" "$PUBLIC/privacy.html" || fail 'privacy.html missing contactEmail binding'
 
 # 8. No design-tool placeholders left
 rg -q 'hint-placeholder' "$PUBLIC/index.html" && fail 'design-tool hint-placeholder attributes remain'
 
-# 9. Canonical origin matches site.js
-ORIGIN=$(rg -o "canonicalOrigin: '([^']+)" "$PUBLIC/site.js" -r '$1')
-rg -q "$ORIGIN" "$PUBLIC/index.html" || fail "index.html missing canonicalOrigin: $ORIGIN"
+# 9. canonicalOrigin consistent across config and generated files
+ORIGIN=$(python3 -c "import json; print(json.load(open('$ROOT/site.config.json'))['canonicalOrigin'].rstrip('/'))")
+rg -q "$ORIGIN" "$PUBLIC/sitemap.xml" || fail "sitemap.xml missing canonicalOrigin: $ORIGIN"
+rg -q "$ORIGIN" "$PUBLIC/robots.txt" || fail "robots.txt missing canonicalOrigin: $ORIGIN"
+rg -q "$ORIGIN/" "$PUBLIC/index.html" || fail "index.html missing canonicalOrigin: $ORIGIN"
+
+# 10. No duplicate contact strings outside allowed files
+ALLOWED='site.js|site.config.json|privacy.html|DEPLOY.md|INTAKE.md'
+MATCHES=$(rg -l "$EMAIL" "$ROOT" --glob '!*.git/*' 2>/dev/null || true)
+if [[ -n "$MATCHES" ]]; then
+  while IFS= read -r file; do
+    [[ -z "$file" ]] && continue
+    echo "$file" | rg -q "$ALLOWED" && continue
+    fail "contactEmail duplicated outside allowed files: $file"
+  done <<< "$MATCHES"
+fi
 
 echo "verify-deploy: OK"
