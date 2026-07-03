@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VeriFunding — Business funding, matched to your deal</title>
+<meta name="description" content="Commercial financing referral for equipment finance, factoring, and ABL. One request, human review, routed with your consent.">
+<link rel="canonical" href="https://verifunding.com/">
+<link rel="icon" href="/assets/favicon.ico">
+<meta property="og:title" content="VeriFunding — Business funding, matched to your deal">
+<meta property="og:description" content="Commercial financing referral for equipment finance, factoring, and ABL.">
+<meta property="og:url" content="https://verifunding.com/">
+<meta property="og:type" content="website">
+<script src="./site.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;450;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #F6F5F2; }
+  ::selection { background: #2F7D5B; color: #fff; }
+  @keyframes vfPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .4; transform: scale(.8); } }
+  @keyframes vfScan { 0% { transform: translateY(-100%); opacity: 0; } 40% { opacity: 1; } 100% { transform: translateY(340px); opacity: 0; } }
+  @keyframes vfFill { from { width: 0; } }
+  .vf-nav-btn:hover { background: rgba(15,17,22,0.04) !important; }
+</style>
+</helmet>
+
+<div style="font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #0E1116; background: #F6F5F2; min-height: 100vh; -webkit-font-smoothing: antialiased; overflow-x: hidden;">
+
+  <!-- soft ambient tint -->
+  <div style="position: fixed; top: -260px; left: 50%; transform: translateX(-50%); width: 1200px; height: 640px; background: radial-gradient(ellipse at center, rgba(22,27,34,0.04), rgba(22,27,34,0) 62%); pointer-events: none; z-index: 0;"></div>
+
+  <!-- ============ NAV ============ -->
+  <header style="position: sticky; top: 0; z-index: 40; background: rgba(246,245,242,0.82); backdrop-filter: saturate(150%) blur(14px); border-bottom: 1px solid #E4E3DE;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 24px;">
+      <a href="#top" style="display: flex; align-items: center; text-decoration: none;">
+        <img src="assets/verifunding_logo.png" alt="VeriFunding" style="height: 30px; width: auto; display: block;" />
+      </a>
+
+      <nav style="display: flex; align-items: center; gap: 4px; background: #FFFFFF; border: 1px solid #E4E3DE; border-radius: 11px; padding: 4px; box-shadow: 0 1px 2px rgba(15,17,22,0.03);">
+        <button class="vf-nav-btn" onClick="{{ setBorrower }}" style="position: relative; background: none; border: none; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 500; padding: 8px 15px; border-radius: 8px;">
+          <sc-if value="{{ isBorrower }}"><span style="position: absolute; inset: 0; background: rgba(22,27,34,0.06); border: 1px solid rgba(22,27,34,0.16); border-radius: 8px;"></span></sc-if>
+          <span style="position: relative; color: {{ borrowerColor }};">Borrowers</span>
+        </button>
+        <button class="vf-nav-btn" onClick="{{ setLender }}" style="position: relative; background: none; border: none; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 500; padding: 8px 15px; border-radius: 8px;">
+          <sc-if value="{{ isLender }}"><span style="position: absolute; inset: 0; background: rgba(22,27,34,0.06); border: 1px solid rgba(22,27,34,0.16); border-radius: 8px;"></span></sc-if>
+          <span style="position: relative; color: {{ lenderColor }};">Lenders</span>
+        </button>
+        <button class="vf-nav-btn" onClick="{{ setPartner }}" style="position: relative; background: none; border: none; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 500; padding: 8px 15px; border-radius: 8px;">
+          <sc-if value="{{ isPartner }}"><span style="position: absolute; inset: 0; background: rgba(22,27,34,0.06); border: 1px solid rgba(22,27,34,0.16); border-radius: 8px;"></span></sc-if>
+          <span style="position: relative; color: {{ partnerColor }};">Partners</span>
+        </button>
+      </nav>
+
+      <a href="{{ ctaHref }}" target="{{ ctaTarget }}" rel="{{ ctaRel }}" style="background: #161B22; color: #fff; border: none; text-decoration: none; display: inline-block; cursor: pointer; font-family: inherit; font-size: 13.5px; font-weight: 600; padding: 10px 18px; border-radius: 9px; white-space: nowrap; box-shadow: 0 6px 18px -6px rgba(22,27,34,0.22);" style-hover="{{ ctaHover }}">Submit a request</a>
+    </div>
+  </header>
+
+  <a id="top"></a>
+
+  <!-- ============ BORROWER VIEW ============ -->
+  <sc-if value="{{ isBorrower }}">
+  <main style="position: relative; z-index: 1;">
+    <!-- Hero -->
+    <section style="max-width: 1200px; margin: 0 auto; padding: 76px 32px 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 9px; padding: 6px 13px 6px 10px; background: #FFFFFF; border: 1px solid #E4E3DE; border-radius: 30px; margin-bottom: 26px; box-shadow: 0 1px 2px rgba(15,17,22,0.03);">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: #2F7D5B; box-shadow: 0 0 8px rgba(47,125,91,0.7);"></span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.08em; color: #276A4D;">EQUIPMENT FINANCE · FACTORING · ABL</span>
+        </div>
+        <h1 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 58px; line-height: 1.02; letter-spacing: -0.025em; margin: 0 0 22px; text-wrap: balance;">Business funding, <span style="color: #2F7D5B;">matched</span> to your deal.</h1>
+        <p style="font-size: 18px; line-height: 1.6; color: #565C66; margin: 0 0 30px; max-width: 32em;">One request. Reviewed by a person, then routed only to the financing partners that fit — with your consent.</p>
+        <div style="display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 30px;">
+          <a href="{{ ctaHref }}" target="{{ ctaTarget }}" rel="{{ ctaRel }}" style="background: #161B22; color: #fff; border: none; text-decoration: none; display: inline-block; cursor: pointer; font-family: inherit; font-size: 15px; font-weight: 600; padding: 15px 26px; border-radius: 10px; box-shadow: 0 10px 28px -8px rgba(22,27,34,0.24);" style-hover="{{ ctaHover }}">Submit a funding request</a>
+          <button onClick="{{ setLender }}" style="background: none; border: none; cursor: pointer; font-family: inherit; font-size: 14.5px; color: #0E1116; font-weight: 500; display: inline-flex; align-items: center; gap: 7px;" style-hover="{{ linkHover }}">For lenders and partners <span aria-hidden="true">&rarr;</span></button>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <sc-for list="{{ trustChips }}" as="chip">
+            <span style="display: inline-flex; align-items: center; gap: 7px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.03em; color: #565C66; padding: 6px 11px; background: #FFFFFF; border: 1px solid #E4E3DE; border-radius: 7px;"><span style="color: #2F7D5B;">&check;</span>{{ chip }}</span>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- Product-forward matching panel -->
+      <div style="position: relative;">
+        <div style="position: relative; background: #FFFFFF; border: 1px solid #E4E3DE; border-radius: 18px; padding: 22px; box-shadow: 0 1px 2px rgba(15,17,22,0.04), 0 30px 60px -30px rgba(15,17,22,0.18); overflow: hidden;">
+          <div style="position: absolute; left: 0; right: 0; top: 0; height: 90px; background: linear-gradient(180deg, rgba(47,125,91,0.09), rgba(47,125,91,0)); animation: vfScan 4.5s ease-in-out infinite; pointer-events: none;"></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative;">
+            <div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #8A909B; margin-bottom: 4px;">REQUEST VF-2094</div>
+              <div style="font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 500;">Equipment · $185,000</div>
+            </div>
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #276A4D; background: rgba(47,125,91,0.09); border: 1px solid rgba(47,125,91,0.25); padding: 5px 11px; border-radius: 20px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #2F7D5B; animation: vfPulse 2s infinite;"></span>SCREENING</span>
+          </div>
+
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.1em; color: #8A909B; margin-bottom: 12px;">FIT AGAINST FUNDING PARTNERS</div>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <!-- Top match -->
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; color: #276A4D; font-weight: 500;"><span style="width: 16px; height: 16px; border-radius: 5px; background: #2F7D5B; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">&check;</span>Top match</span>
+              </div>
+              <div style="height: 8px; background: #EEF0ED; border-radius: 6px; overflow: hidden;">
+                <div style="height: 100%; width: 92%; background: linear-gradient(90deg,#276A4D,#3E8E6A); border-radius: 6px; animation: vfFill 1.4s cubic-bezier(.2,.8,.2,1);"></div>
+              </div>
+            </div>
+            <!-- Skeleton candidates -->
+            <sc-for list="{{ skeletonRows }}" as="w">
+              <div>
+                <div style="margin-bottom: 6px;">
+                  <span style="display: inline-block; width: 96px; height: 9px; background: #ECEEE9; border-radius: 5px;"></span>
+                </div>
+                <div style="height: 8px; background: #F1F2EF; border-radius: 6px; overflow: hidden;">
+                  <div style="height: 100%; width: {{ w }}; background: #DDE0DB; border-radius: 6px;"></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.08em; color: #B0B5AD; margin: 14px 0 0;">Illustrative — sample routing.</p>
+
+          <div style="margin-top: 20px; padding: 14px; background: rgba(47,125,91,0.06); border: 1px solid rgba(47,125,91,0.18); border-radius: 12px; display: flex; gap: 11px; align-items: flex-start;">
+            <span style="width: 22px; height: 22px; border-radius: 6px; background: #2F7D5B; color: #fff; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;">&check;</span>
+            <p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: #3A5148;">Reviewed by a person, then routed only to partners that fit — with your consent.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem strip -->
+    <section style="border-top: 1px solid #E4E3DE; border-bottom: 1px solid #E4E3DE; background: #FFFFFF;">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 82px 32px; display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 56px;">
+        <div>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #5C6470; margin: 0 0 18px;">The problem</p>
+          <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 40px; line-height: 1.06; letter-spacing: -0.02em; margin: 0; text-wrap: balance;">Business financing gets messy fast.</h2>
+        </div>
+        <div>
+          <p style="font-size: 17.5px; line-height: 1.7; color: #565C66; margin: 0 0 22px;">One form turns into a dozen calls. Fees hide in the rate. Lease terms bury future costs. And every lender you apply to runs another credit check.</p>
+          <p style="font-size: 17.5px; line-height: 1.7; color: #0E1116; margin: 0; border-left: 2px solid #2F7D5B; padding-left: 20px;">VeriFunding starts with one reviewed request. We look at the need, the business, and the likely fit before anything goes out.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coverage -->
+    <section style="max-width: 1200px; margin: 0 auto; padding: 88px 32px;">
+      <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #5C6470; margin: 0 0 14px;">Coverage</p>
+      <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 38px; line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 44px;">What we finance</h2>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+        <sc-for list="{{ finance }}" as="item">
+          <div style="background: #FFFFFF; border: 1px solid #E4E3DE; padding: 24px 24px; border-radius: 14px; box-shadow: 0 1px 2px rgba(15,17,22,0.03); display: flex; align-items: center; gap: 14px;" style-hover="{{ cardHover }}">
+            <span style="width: 22px; height: 22px; border-radius: 6px; background: rgba(47,125,91,0.10); border: 1px solid rgba(47,125,91,0.22); color: #2F7D5B; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">&check;</span>
+            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 500; margin: 0; letter-spacing: -0.01em;">{{ item.title }}</h3>
+          </div>
+        </sc-for>
+      </div>
+      <p style="font-size: 13px; line-height: 1.6; color: #8A909B; margin: 26px 0 0; max-width: 64em;">We focus on established, equipment-heavy operators. We do not do merchant cash advance, consumer loans, or residential real estate.</p>
+    </section>
+
+    <!-- How it works -->
+    <section style="border-top: 1px solid #E4E3DE; background: #FFFFFF;">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 88px 32px;">
+        <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #5C6470; margin: 0 0 14px;">Process</p>
+        <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 38px; line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 48px;">How it works</h2>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+          <sc-for list="{{ steps }}" as="item">
+            <div style="position: relative; padding-top: 24px; border-top: 1px solid #DDE0DB;">
+              <span style="position: absolute; top: -1px; left: 0; width: 40px; height: 2px; background: #161B22;"></span>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F7D5B; margin-bottom: 16px;">0{{ item.num }}</div>
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 500; margin: 0 0 10px; letter-spacing: -0.01em;">{{ item.title }}</h3>
+              <p style="font-size: 14.5px; line-height: 1.6; color: #565C66; margin: 0;">{{ item.desc }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- Transparency -->
+    <section style="max-width: 1200px; margin: 0 auto; padding: 88px 32px;">
+      <div style="display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 56px; align-items: start;">
+        <div>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #5C6470; margin: 0 0 18px;">Transparency</p>
+          <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 38px; line-height: 1.06; letter-spacing: -0.02em; margin: 0 0 22px; text-wrap: balance;">You'll see every number before you sign.</h2>
+          <p style="font-size: 17px; line-height: 1.7; color: #565C66; margin: 0; max-width: 34em;">We present your terms and walk you through the complete cost — payment, rate, total of payments, every fee, and how prepayment is handled. No surprises buried in the paperwork.</p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <sc-for list="{{ transparency }}" as="item">
+            <div style="background: #FFFFFF; border: 1px solid #E4E3DE; border-radius: 14px; padding: 24px 26px; box-shadow: 0 1px 2px rgba(15,17,22,0.03); display: flex; gap: 16px; align-items: flex-start;" style-hover="{{ cardHover }}">
+              <span style="width: 24px; height: 24px; border-radius: 7px; background: rgba(47,125,91,0.10); border: 1px solid rgba(47,125,91,0.22); color: #2F7D5B; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 1px;">&check;</span>
+              <div>
+                <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 500; margin: 0 0 5px; letter-spacing: -0.01em;">{{ item.title }}</h3>
+                <p style="font-size: 14.5px; line-height: 1.6; color: #565C66; margin: 0;">{{ item.desc }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why owners start here -->
+    <section style="max-width: 1200px; margin: 0 auto; padding: 88px 32px;">
+      <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #5C6470; margin: 0 0 14px;">Why owners start here</p>
+      <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 38px; line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 48px;">Fewer applications. Better fit. Nothing hidden.</h2>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+        <sc-for list="{{ values }}" as="item">
+          <div style="background: #FFFFFF; border: 1px solid #E4E3DE; border-radius: 16px; padding: 32px 30px; box-shadow: 0 1px 2px rgba(15,17,22,0.03);" style-hover="{{ cardHover }}">
+            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 500; margin: 0 0 12px; letter-spacing: -0.015em;">{{ item.title }}</h3>
+            <p style="font-size: 15px; line-height: 1.65; color: #565C66; margin: 0;">{{ item.desc }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- Built for established -->
+    <section style="max-width: 1200px; margin: 0 auto 96px; padding: 0 32px;">
+      <div style="position: relative; border-radius: 22px; overflow: hidden; border: 1px solid rgba(22,27,34,0.10); background: linear-gradient(135deg, #F1F0EC, #FBFAF8 60%);">
+        <div style="position: absolute; top: -120px; right: -80px; width: 420px; height: 420px; background: radial-gradient(circle, rgba(22,27,34,0.05), rgba(22,27,34,0) 65%); pointer-events: none;"></div>
+        <div style="position: relative; padding: 60px 52px; display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 44px; align-items: center;">
+          <div>
+            <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 34px; line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 18px;">Built for established businesses.</h2>
+            <p style="font-size: 16.5px; line-height: 1.65; color: #3A5148; margin: 0; max-width: 40em;">VeriFunding is a fit if you have operating history, revenue, and a specific use for the funds. We work with owner-operators, fleets, contractors, shops, and other equipment-heavy businesses across most U.S. states.</p>
+          </div>
+          <div style="display: flex; justify-content: flex-end;">
+            <a href="{{ ctaHref }}" target="{{ ctaTarget }}" rel="{{ ctaRel }}" style="background: #161B22; color: #fff; border: none; text-decoration: none; display: inline-block; cursor: pointer; font-family: inherit; font-size: 15px; font-weight: 600; padding: 15px 28px; border-radius: 10px; white-space: nowrap; box-shadow: 0 10px 28px -8px rgba(22,27,34,0.24);" style-hover="{{ ctaHover }}">Submit a funding request</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ============ LENDER VIEW ============ -->
+  <sc-if value="{{ isLender }}">
+  <main style="position: relative; z-index: 1;">
+    <section style="max-width: 1200px; margin: 0 auto; padding: 76px 32px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+      <div>
+        <div style="display: inline-flex; align-items: center; gap: 9px; padding: 6px 13px 6px 10px; background: #FFFFFF; border: 1px solid #E4E3DE; border-radius: 30px; margin-bottom: 26px; box-shadow: 0 1px 2px rgba(15,17,22,0.03);">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: #2F7D5B; box-shadow: 0 0 8px rgba(47,125,91,0.7);"></span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.08em; color: #276A4D;">FOR FUNDING PARTNERS</span>
+        </div>
+        <h1 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 52px; line-height: 1.04; letter-spacing: -0.025em; margin: 0 0 22px; text-wrap: balance;">Qualified deals, screened to your <span style="color: #2F7D5B;">funding box</span>.</h1>
+        <p style="font-size: 18px; line-height: 1.6; color: #565C66; margin: 0 0 30px; max-width: 34em;">A curated referral channel for equipment finance, factoring, and asset-based lenders. We learn your criteria and route files that fit.</p>
+        <a href="{{ ctaHref }}" target="{{ ctaTarget }}" rel="{{ ctaRel }}" style="background: #161B22; color: #fff; border: none; text-decoration: none; display: inline-block; cursor: pointer; font-family: inherit; font-size: 15px; font-weight: 600; padding: 15px 28px; border-radius: 10px; box-shadow: 0 10px 28px -8px rgba(22,27,34,0.24);" style-hover="{{ ctaHover }}">Become a funding partner</a>
+      </div>
+
+      <!-- Funding box panel -->
+      <div style="position: relative;">
+        <div style="position: relative; background: #FFFFFF; border: 1px solid #E4E3DE; border-radius: 18px; padding: 24px; box-shadow: 0 1px 2px rgba(15,17,22,0.04), 0 30px 60px -30px rgba(15,17,22,0.18);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #8A909B;">YOUR FUNDING BOX</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.08em; color: #B0B5AD; border: 1px solid #E4E3DE; padding: 2px 7px; border-radius: 5px;">ILLUSTRATIVE</span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px;">
+            <sc-for list="{{ boxChips }}" as="c">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #3A414B; padding: 6px 11px; background: #F4F5F2; border: 1px solid #E4E3DE; border-radius: 8px;">{{ c }}</span>
+            </sc-for>
+          </div>
+          <div style="height: 1px; background: #E4E3DE; margin-bottom: 18px;"></div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #8A909B; margin-bottom: 12px;">INCOMING FILE · SCORED</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; background: rgba(47,125,91,0.06); border: 1px solid rgba(47,125,91,0.22); border-radius: 13px;">
+            <div>
+              <div style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 500;">Fleet · $240K · 6 yrs TIB</div>
+              <div style="font-size: 12.5px; color: #6A707A; margin-top: 3px;">Docs complete · in-appetite · TX</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 600; color: #2F7D5B; line-height: 1;">94</div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8A909B; letter-spacing: 0.06em;">FIT SCORE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cost -->
+    <section style="border-top: 1px solid #E4E3DE; background: #FFFFFF;">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 84px 32px;">
+        <div style="border: 1px solid rgba(22,27,34,0.10); background: linear-gradient(135deg, #F1F0EC, #FBFAF8 60%); border-radius: 18px; padding: 44px 48px; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 44px; align-items: center;">
+          <div>
+            <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #5C6470; margin: 0 0 14px;">Cost</p>
+            <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 28px; line-height: 1.12; letter-spacing: -0.02em; margin: 0;">No cost to join. Compensated only when a deal you fund closes.</h2>
+          </div>
+          <p style="font-size: 16px; line-height: 1.7; color: #3A5148; margin: 0;">No fee, no minimum volume. We're paid by partners only on closed deals — so we send files that fit your box, not volume for its own sake.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works (funder POV) -->
+    <section style="max-width: 1200px; margin: 0 auto; padding: 88px 32px;">
+      <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #5C6470; margin: 0 0 14px;">How it works</p>
+      <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 38px; line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 48px;">Three steps, your side of the table.</h2>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        <sc-for list="{{ funderSteps }}" as="item">
+          <div style="position: relative; padding-top: 24px; border-top: 1px solid #DDE0DB;">
+            <span style="position: absolute; top: -1px; left: 0; width: 40px; height: 2px; background: #161B22;"></span>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #2F7D5B; margin-bottom: 16px;">0{{ item.num }}</div>
+            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 500; margin: 0 0 10px; letter-spacing: -0.01em;">{{ item.title }}</h3>
+            <p style="font-size: 14.5px; line-height: 1.6; color: #565C66; margin: 0;">{{ item.desc }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- What you're not getting -->
+    <section style="border-top: 1px solid #E4E3DE; background: #FFFFFF;">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 84px 32px; display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 56px;">
+        <div>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #5C6470; margin: 0 0 18px;">What you're not getting</p>
+          <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 32px; line-height: 1.08; letter-spacing: -0.02em; margin: 0; text-wrap: balance;">No MCA. No blasting. No raw leads.</h2>
+        </div>
+        <div style="align-self: center;">
+          <p style="font-size: 17.5px; line-height: 1.7; color: #0E1116; margin: 0; border-left: 2px solid #2F7D5B; padding-left: 20px;">A curated channel for equipment finance, factoring, and ABL — built for a higher hit rate on the files you see.</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="max-width: 1200px; margin: 0 auto; padding: 84px 32px; text-align: center;">
+      <a href="{{ ctaHref }}" target="{{ ctaTarget }}" rel="{{ ctaRel }}" style="background: #161B22; color: #fff; border: none; text-decoration: none; display: inline-block; cursor: pointer; font-family: inherit; font-size: 15.5px; font-weight: 600; padding: 16px 32px; border-radius: 11px; box-shadow: 0 14px 36px -10px rgba(22,27,34,0.28);" style-hover="{{ ctaHover }}">Become a funding partner</a>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ============ PARTNER VIEW ============ -->
+  <sc-if value="{{ isPartner }}">
+  <main style="position: relative; z-index: 1;">
+    <section style="max-width: 920px; margin: 0 auto; padding: 92px 32px 64px; text-align: center;">
+      <div style="display: inline-flex; align-items: center; gap: 9px; padding: 6px 13px 6px 10px; background: #FFFFFF; border: 1px solid #E4E3DE; border-radius: 30px; margin-bottom: 26px; box-shadow: 0 1px 2px rgba(15,17,22,0.03);">
+        <span style="width: 7px; height: 7px; border-radius: 50%; background: #2F7D5B; box-shadow: 0 0 8px rgba(47,125,91,0.7);"></span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.08em; color: #276A4D;">FOR REFERRAL PARTNERS</span>
+      </div>
+      <h1 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 50px; line-height: 1.05; letter-spacing: -0.025em; margin: 0 0 22px; text-wrap: balance;">A clean place to send clients who need financing.</h1>
+      <p style="font-size: 18px; line-height: 1.6; color: #565C66; margin: 0 auto; max-width: 34em;">Your clients get a clear first step. You get a clean referral.</p>
+    </section>
+
+    <section style="max-width: 1200px; margin: 0 auto 96px; padding: 0 32px;">
+      <div style="background: #FFFFFF; border: 1px solid #E4E3DE; border-radius: 20px; padding: 56px 52px; display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 52px; align-items: center; box-shadow: 0 1px 2px rgba(15,17,22,0.03);">
+        <div>
+          <p style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #5C6470; margin: 0 0 14px;">Who we work with</p>
+          <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 30px; line-height: 1.12; letter-spacing: -0.02em; margin: 0;">You refer the client. We handle the first pass.</h2>
+        </div>
+        <div>
+          <p style="font-size: 16px; line-height: 1.7; color: #565C66; margin: 0 0 20px;">Equipment sellers, business brokers, consultants, bookkeepers, CPAs, franchise advisors, and commercial service providers.</p>
+          <p style="font-size: 16px; line-height: 1.7; color: #565C66; margin: 0 0 28px;">You refer. We handle the first-pass review, fit, document guidance, and partner routing.</p>
+          <a href="{{ ctaHref }}" target="{{ ctaTarget }}" rel="{{ ctaRel }}" style="background: #161B22; color: #fff; border: none; text-decoration: none; display: inline-block; cursor: pointer; font-family: inherit; font-size: 15px; font-weight: 600; padding: 15px 28px; border-radius: 10px; box-shadow: 0 10px 28px -8px rgba(22,27,34,0.24);" style-hover="{{ ctaHover }}">Refer a business</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ============ CLOSING ============ -->
+  <section style="position: relative; z-index: 1; border-top: 1px solid #E4E3DE; background: #FFFFFF;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 92px 32px; text-align: center;">
+      <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 40px; line-height: 1.06; letter-spacing: -0.025em; margin: 0 0 16px;">Start with a short review.</h2>
+      <p style="font-size: 17.5px; line-height: 1.6; color: #565C66; margin: 0 auto 32px; max-width: 34em;">Tell us what your business needs to fund. We'll review the request and follow up if there's a fit.</p>
+      <a href="{{ ctaHref }}" target="{{ ctaTarget }}" rel="{{ ctaRel }}" style="background: #161B22; color: #fff; border: none; text-decoration: none; display: inline-block; cursor: pointer; font-family: inherit; font-size: 15.5px; font-weight: 600; padding: 16px 32px; border-radius: 11px; box-shadow: 0 14px 36px -10px rgba(22,27,34,0.28);" style-hover="{{ ctaHover }}">Submit a funding request</a>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="position: relative; z-index: 1; border-top: 1px solid #E4E3DE; background: #0E1116;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 52px 32px 44px;">
+      <div style="margin-bottom: 26px;">
+        <img src="assets/verifunding_logo_white.png" alt="VeriFunding" style="height: 26px; width: auto; display: block;" />
+      </div>
+      <p style="font-size: 12.5px; line-height: 1.7; color: #8A909B; margin: 0; max-width: 76em;">VeriFunding is a commercial financing referral service operated by ClearMetric LLC. VeriFunding is not a lender, makes no credit decisions, and does not guarantee financing. Financing is provided by, and subject to approval by, independent funding partners. No upfront borrower fee; VeriFunding may be compensated by partners on closed financing. VeriFunding does not offer merchant cash advance or sales-based financing.</p>
+      <div style="margin-top: 30px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 12px; color: #6A707A;">
+        <span>&copy; {{ year }} {{ companyLegal }}. All rights reserved. · <a href="/privacy.html" style="color: #8A909B; text-decoration: underline;">Privacy Policy</a></span>
+        <span style="font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.04em;">Operated under {{ companyLegal }}</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { view: 'borrower' };
+
+  setView(v) {
+    this.setState({ view: v });
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const site = window.SITE;
+    return {
+      isBorrower: s.view === 'borrower',
+      isLender: s.view === 'lender',
+      isPartner: s.view === 'partner',
+      borrowerColor: s.view === 'borrower' ? '#0E1116' : '#565C66',
+      lenderColor: s.view === 'lender' ? '#0E1116' : '#565C66',
+      partnerColor: s.view === 'partner' ? '#0E1116' : '#565C66',
+      setBorrower: () => this.setView('borrower'),
+      setLender: () => this.setView('lender'),
+      setPartner: () => this.setView('partner'),
+
+      ctaHref: site.ctaHref,
+      ctaTarget: site.ctaTarget,
+      ctaRel: site.ctaTarget === '_blank' ? 'noopener noreferrer' : '',
+      contactEmail: site.contactEmail,
+      companyLegal: site.companyLegal,
+      productName: site.productName,
+
+      ctaHover: { background: '#232B36', transform: 'translateY(-1px)' },
+      linkHover: { color: '#2F7D5B' },
+      cardHover: { borderColor: 'rgba(22,27,34,0.20)', boxShadow: '0 12px 28px -14px rgba(15,17,22,0.15)' },
+
+      year: new Date().getFullYear(),
+
+      trustChips: ['No upfront borrower fee', 'Human review', 'Not a lender'],
+
+      skeletonRows: ['58%', '42%', '29%'],
+
+      finance: [
+        { title: 'Equipment & machinery' },
+        { title: 'Commercial vehicles & fleet' },
+        { title: 'Working capital' },
+        { title: 'Factoring' },
+        { title: 'Asset-based lending' },
+        { title: 'Inventory & purchase orders' },
+        { title: 'Expansion projects' },
+        { title: 'Select acquisitions' },
+      ],
+      steps: [
+        { num: '1', title: 'Submit', desc: 'One short request. A few minutes, no upfront fee.' },
+        { num: '2', title: 'Review', desc: 'A person checks the need and the likely product fit.' },
+        { num: '3', title: 'Route', desc: 'We send it only to partners that fit, with your consent.' },
+      ],
+      transparency: [
+        { title: 'Full cost, plain language', desc: 'The real total, not just a monthly payment.' },
+        { title: "How we're paid", desc: "Lenders pay us, and that's reflected in your terms. We'll show you either way." },
+        { title: 'Your call', desc: 'Nothing gets signed until the numbers make sense to you.' },
+      ],
+      values: [
+        { title: 'One request', desc: 'Not a dozen forms and repeat credit checks.' },
+        { title: 'Human review', desc: 'A person looks at your deal before it moves.' },
+        { title: 'Your consent', desc: 'Nothing goes to a lender until you say so.' },
+      ],
+      boxChips: ['Equipment finance', 'Factoring', 'ABL', '$50K–$2M', 'TIB 3yr+', 'TX · SE region', 'No MCA'],
+      funderSteps: [
+        { num: '1', title: 'Your box', desc: 'Deal types, credit tiers, ticket range, states, hard no-gos. We encode it.' },
+        { num: '2', title: 'We screen', desc: 'Every file is reviewed and checked against your criteria first.' },
+        { num: '3', title: 'You decide', desc: 'In-appetite, document-ready files. Yes, no, or counter. We handle the borrower.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>
